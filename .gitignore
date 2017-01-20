@@ -1,0 +1,12 @@
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userprefs
+.vs/
+.vscode/
+packages/
+.TestResults/
+*.nuget.props
+*.nuget.targets
+*.orig
