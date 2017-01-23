@@ -7,8 +7,8 @@
     <ProjectGuid>{BE2A614C-22CB-4329-83BC-2A30A2169295}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contentful.Wyam.Module</RootNamespace>
-    <AssemblyName>Contentful.Wyam.Module</AssemblyName>
+    <RootNamespace>Contentful.Wyam</RootNamespace>
+    <AssemblyName>Contentful.Wyam</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
