@@ -191,10 +191,10 @@ namespace Contentful.Wyam
                     var content = items.ContainsKey(_contentField) ? items[_contentField][localeCode].ToString() : "No content";
 
                     var metaData = items.Select(c => new KeyValuePair<string, object>(c.Key, c.Value[localeCode])).ToList();
-                    metaData.Add(new KeyValuePair<string, object>("ContentfulId", $"{entry.SystemProperties.Id}"));
-                    metaData.Add(new KeyValuePair<string, object>("ContentfulLocale", localeCode));
-                    metaData.Add(new KeyValuePair<string, object>("ContentfulIncludedAssets", includedAssets));
-                    metaData.Add(new KeyValuePair<string, object>("ContentfulIncludedEntries", includedEntries));
+                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryId, $"{entry.SystemProperties.Id}"));
+                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryLocale, localeCode));
+                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedAssets, includedAssets));
+                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedEntries, includedEntries));
                     var doc = context.GetDocument(content, metaData);
 
                     yield return doc;
