@@ -12,10 +12,5 @@
     <description>$description$</description>
     <copyright>Contentful GmbH</copyright>
     <tags>Wyam Static StaticContent Contentful</tags>
-    <dependencies>
-      <dependency id="Newtonsoft.Json" version="9.0"/>
-      <dependency id="contentful.csharp" version="0.10" />
-      <dependency id="Wyam.Common" version="0.15.8" />
-    </dependencies>
   </metadata>
 </package>
