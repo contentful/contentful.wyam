@@ -35,7 +35,7 @@ namespace Contentful.Wyam
 
         public Contentful(IContentfulClient client)
         {
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client), "IContentful client cannot be null.");
         }
 
         public Contentful WithContentField(string field)
