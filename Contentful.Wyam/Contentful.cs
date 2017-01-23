@@ -37,6 +37,7 @@ namespace Contentful.Wyam
         private int _includes = 1;
         private int _limit = 100;
         private int _skip = 0;
+        private bool _recursive = false;
 
         /// <summary>
         /// Calls the Contentful API using the specified deliverykey and spaceId.
@@ -136,11 +137,29 @@ namespace Contentful.Wyam
             return this;
         }
 
+        /// <summary>
+        /// Specifies that the Contentful API should be called recursively until all entries have been fetched.
+        /// </summary>
+        /// <remarks>
+        /// Note that this might result in several calls being made to the Contentful API. Ratelimits may apply.
+        /// </remarks>
+        public Contentful WithRecursiveCalling()
+        {
+            _recursive = true;
+            return this;
+        }
+
         public IEnumerable<IDocument> Execute(IReadOnlyList<IDocument> inputs, IExecutionContext context)
         {
             var space = _client.GetSpaceAsync().Result;
             var queryBuilder = CreateQueryBuilder();
             var entries = _client.GetEntriesCollectionAsync(queryBuilder).Result;
+
+            if(_recursive && entries.Total > entries.Items.Count())
+            {
+                entries = FetchEntriesRecursively(entries);
+            }
+
             var includedAssets = entries.IncludedAssets;
             var includedEntries = entries.IncludedEntries;
 
@@ -185,7 +204,8 @@ namespace Contentful.Wyam
 
         private QueryBuilder<Entry<dynamic>> CreateQueryBuilder() {
             var queryBuilder = QueryBuilder<Entry<dynamic>>.New.LocaleIs("*").Include(_includes)
-                .OrderBy(SortOrderBuilder<Entry<dynamic>>.New(f => f.SystemProperties.CreatedAt).Build());
+                .OrderBy(SortOrderBuilder<Entry<dynamic>>.New(f => f.SystemProperties.CreatedAt).Build())
+                .Limit(_limit).Skip(_skip);
 
             if (!string.IsNullOrEmpty(_contentTypeId))
             {
@@ -193,6 +213,39 @@ namespace Contentful.Wyam
             }
 
             return queryBuilder;
+        }
+
+        private ContentfulCollection<Entry<dynamic>> FetchEntriesRecursively(ContentfulCollection<Entry<dynamic>> entries)
+        {
+            var entryList = new List<Entry<dynamic>>();
+            var includedAssets = new List<Asset>();
+            var includedEntries = new List<Entry<dynamic>>();
+            var collection = new ContentfulCollection<Entry<dynamic>>()
+            {
+                Items = entries.Items
+            };
+            entryList.AddRange(entries.Items);
+            includedAssets.AddRange(entries.IncludedAssets);
+            includedEntries.AddRange(entries.IncludedEntries);
+
+            _skip += _limit;
+
+            while (collection.Count() == _limit)
+            {
+                collection = _client.GetEntriesCollectionAsync(CreateQueryBuilder()).Result;
+
+                entryList.AddRange(collection.Items);
+                includedAssets.AddRange(collection.IncludedAssets.Where(c => !includedAssets.Any(a => a.SystemProperties.Id == c.SystemProperties.Id)));
+                includedEntries.AddRange(collection.IncludedEntries.Where(c => !includedAssets.Any(a => a.SystemProperties.Id == c.SystemProperties.Id)));
+
+                _skip += _limit;
+            }
+
+            collection.Items = entryList;
+            collection.IncludedAssets = includedAssets;
+            collection.IncludedEntries = includedEntries;
+
+            return collection;
         }
     }
 }
