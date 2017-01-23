@@ -22,7 +22,12 @@ namespace Contentful.Wyam
         private string _locale = null;
         private int _includes = 1;
 
-        public Contentful(string deliveryKey, string spaceId, bool usePreview = false)
+        public Contentful(string deliveryKey, string spaceId): this(deliveryKey, spaceId, false)
+        {
+
+        }
+
+        public Contentful(string deliveryKey, string spaceId, bool usePreview)
         {
             var httpClient = new HttpClient();
             _client = new ContentfulClient(httpClient, deliveryKey, spaceId, usePreview);
