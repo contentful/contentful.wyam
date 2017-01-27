@@ -1,9 +1,11 @@
 ﻿using Contentful.Core;
+using Contentful.Core.Errors;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -151,11 +153,32 @@ namespace Contentful.Wyam
 
         public IEnumerable<IDocument> Execute(IReadOnlyList<IDocument> inputs, IExecutionContext context)
         {
-            var space = _client.GetSpaceAsync().Result;
-            var queryBuilder = CreateQueryBuilder();
-            var entries = _client.GetEntriesCollectionAsync(queryBuilder).Result;
+            Space space = null;
 
-            if(_recursive && entries.Total > entries.Items.Count())
+            try
+            {
+                space = _client.GetSpaceAsync().Result;
+            }
+            catch(ContentfulException ex)
+            {
+                Trace.TraceError($"Error when fetching space from Contentful: {ex.Message} \r\nDetails: {ex.ErrorDetails.Errors} \r\nContentfulRequestId:{ex.RequestId}");
+                throw;
+            }
+
+            var queryBuilder = CreateQueryBuilder();
+            ContentfulCollection<Entry<dynamic>> entries = null;
+
+            try
+            {
+                entries = _client.GetEntriesCollectionAsync(queryBuilder).Result;
+            }
+            catch (ContentfulException ex)
+            {
+                Trace.TraceError($"Error when fetching entries from Contentful: {ex.Message} \r\nDetails: {ex.ErrorDetails.Errors} \r\nContentfulRequestId:{ex.RequestId}");
+                throw;
+            }
+
+            if (_recursive && entries.Total > entries.Items.Count())
             {
                 entries = FetchEntriesRecursively(entries);
             }
@@ -189,6 +212,11 @@ namespace Contentful.Wyam
                     var items = (entry.Fields as IEnumerable<KeyValuePair<string, JToken>>).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                     
                     var content = items.ContainsKey(_contentField) ? items[_contentField][localeCode].ToString() : "No content";
+
+                    if (string.IsNullOrEmpty(_contentField))
+                    {
+                        content = "";
+                    }
 
                     var metaData = items.Select(c => new KeyValuePair<string, object>(c.Key, c.Value[localeCode])).ToList();
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryId, $"{entry.SystemProperties.Id}"));
