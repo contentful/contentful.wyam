@@ -159,10 +159,17 @@ namespace Contentful.Wyam
             {
                 space = _client.GetSpaceAsync().Result;
             }
-            catch(ContentfulException ex)
+            catch(AggregateException ae)
             {
-                Trace.TraceError($"Error when fetching space from Contentful: {ex.Message} \r\nDetails: {ex.ErrorDetails.Errors} \r\nContentfulRequestId:{ex.RequestId}");
-                throw;
+                ae.Handle((ex) => {
+
+                    if(ex is ContentfulException)
+                    {
+                        Trace.TraceError($"Error when fetching space from Contentful: {ex.Message} \r\nDetails: {(ex as ContentfulException).ErrorDetails.Errors} \r\nContentfulRequestId:{(ex as ContentfulException).RequestId}");
+                    }
+
+                    return false;
+                });
             }
 
             var queryBuilder = CreateQueryBuilder();
@@ -172,10 +179,17 @@ namespace Contentful.Wyam
             {
                 entries = _client.GetEntriesCollectionAsync(queryBuilder).Result;
             }
-            catch (ContentfulException ex)
+            catch (AggregateException ae)
             {
-                Trace.TraceError($"Error when fetching entries from Contentful: {ex.Message} \r\nDetails: {ex.ErrorDetails.Errors} \r\nContentfulRequestId:{ex.RequestId}");
-                throw;
+                ae.Handle((ex) => {
+
+                    if (ex is ContentfulException)
+                    {
+                        Trace.TraceError($"Error when fetching entries from Contentful: {ex.Message} \r\nDetails: {(ex as ContentfulException).ErrorDetails.Errors} \r\nContentfulRequestId:{(ex as ContentfulException).RequestId}");
+                    }
+
+                    return false;
+                });
             }
 
             if (_recursive && entries.Total > entries.Items.Count())
