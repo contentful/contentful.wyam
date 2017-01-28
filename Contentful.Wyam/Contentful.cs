@@ -165,7 +165,9 @@ namespace Contentful.Wyam
 
                     if(ex is ContentfulException)
                     {
-                        Trace.TraceError($"Error when fetching space from Contentful: {ex.Message} \r\nDetails: {(ex as ContentfulException).ErrorDetails.Errors} \r\nContentfulRequestId:{(ex as ContentfulException).RequestId}");
+                        Trace.TraceError($"Error when fetching space from Contentful: {ex.Message}");
+                        Trace.TraceError($"Details: {(ex as ContentfulException).ErrorDetails.Errors}");
+                        Trace.TraceError($"ContentfulRequestId:{(ex as ContentfulException).RequestId}");
                     }
 
                     return false;
@@ -185,7 +187,9 @@ namespace Contentful.Wyam
 
                     if (ex is ContentfulException)
                     {
-                        Trace.TraceError($"Error when fetching entries from Contentful: {ex.Message} \r\nDetails: {(ex as ContentfulException).ErrorDetails.Errors} \r\nContentfulRequestId:{(ex as ContentfulException).RequestId}");
+                        Trace.TraceError($"Error when fetching entries from Contentful: {ex.Message}");
+                        Trace.TraceError($"Details: {(ex as ContentfulException).ErrorDetails.Errors}");
+                        Trace.TraceError($"ContentfulRequestId:{(ex as ContentfulException).RequestId}");
                     }
 
                     return false;
