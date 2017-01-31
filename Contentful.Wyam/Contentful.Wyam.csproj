@@ -136,6 +136,7 @@
   <ItemGroup>
     <Compile Include="Contentful.cs" />
     <Compile Include="ContentfulKeys.cs" />
+    <Compile Include="IDocumentExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
