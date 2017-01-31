@@ -25,16 +25,18 @@ namespace Contentful.Wyam
             return entries.FirstOrDefault(c => c.SystemProperties.Id == id);
         }
 
-        public static string ImageTagForForAssetById(this IDocument doc, string id, string alt="", 
+        public static string ImageTagForForAssetById(this IDocument doc, string id, string alt=null, 
             int? width = null, int? height = null, int? jpgQuality = null, ImageResizeBehaviour resizeBehaviour = ImageResizeBehaviour.Default, 
             ImageFormat format = ImageFormat.Default, int? cornerRadius = 0, ImageFocusArea focus = ImageFocusArea.Default, string backgroundColor = null)
         {
             var asset = doc.List<Asset>(ContentfulKeys.IncludedAssets)?.FirstOrDefault(c => c.SystemProperties.Id == id);
-
+            
             if(asset == null)
             {
                 return string.Empty;
             }
+
+            var locale = doc.Get<string>(ContentfulKeys.EntryLocale);
 
             var imageUrlBuilder = ImageUrlBuilder.New();
 
@@ -60,7 +62,12 @@ namespace Contentful.Wyam
 
             imageUrlBuilder.SetResizingBehaviour(resizeBehaviour).SetFormat(format).SetFocusArea(focus).SetBackgroundColor(backgroundColor);
 
-            return $@"<img src=""{asset.FilesLocalized[doc.Get<string>(ContentfulKeys.EntryLocale)].Url + imageUrlBuilder.Build()}"" alt=""{alt}"" height=""{height}"" width=""{width}"" />";
+            if(alt == null && !string.IsNullOrEmpty(asset.TitleLocalized[locale]))
+            {
+                alt = asset.TitleLocalized[locale];
+            }
+
+            return $@"<img src=""{asset.FilesLocalized[locale].Url + imageUrlBuilder.Build()}"" alt=""{alt}"" height=""{height}"" width=""{width}"" />";
         }
 
     }
