@@ -25,11 +25,11 @@ namespace Contentful.Wyam
             return entries.FirstOrDefault(c => c.SystemProperties.Id == id);
         }
 
-        public static string ImageTagForForAssetById(this IDocument doc, string id, string alt=null, 
+        public static string ImageTagForAsset(this IDocument doc, string assetId, string alt=null, 
             int? width = null, int? height = null, int? jpgQuality = null, ImageResizeBehaviour resizeBehaviour = ImageResizeBehaviour.Default, 
             ImageFormat format = ImageFormat.Default, int? cornerRadius = 0, ImageFocusArea focus = ImageFocusArea.Default, string backgroundColor = null)
         {
-            var asset = doc.List<Asset>(ContentfulKeys.IncludedAssets)?.FirstOrDefault(c => c.SystemProperties.Id == id);
+            var asset = doc.List<Asset>(ContentfulKeys.IncludedAssets)?.FirstOrDefault(c => c.SystemProperties.Id == assetId);
             
             if(asset == null)
             {
