@@ -60,7 +60,7 @@ namespace Contentful.Wyam
 
             imageUrlBuilder.SetResizingBehaviour(resizeBehaviour).SetFormat(format).SetFocusArea(focus).SetBackgroundColor(backgroundColor);
 
-            return $@"<img src=""{asset.File.Url + imageUrlBuilder.Build()}"" alt=""{alt}"" height=""{height}"" width=""{width}"" />";
+            return $@"<img src=""{asset.FilesLocalized[doc.Get<string>(ContentfulKeys.EntryLocale)].Url + imageUrlBuilder.Build()}"" alt=""{alt}"" height=""{height}"" width=""{width}"" />";
         }
 
     }
