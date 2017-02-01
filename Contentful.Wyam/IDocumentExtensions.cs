@@ -1,5 +1,6 @@
 ﻿using Contentful.Core.Images;
 using Contentful.Core.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,16 @@ namespace Contentful.Wyam
 {
     public static class IDocumentExtensions
     {
+        public static Asset GetIncludedAsset(this IDocument doc, JToken token)
+        {
+            if (token["sys"] == null || token["sys"]["id"] == null)
+            {
+                return null;
+            }
+
+            return GetIncludedAssetById(doc, token["sys"]["id"].ToString());
+        }
+
         public static Asset GetIncludedAssetById(this IDocument doc, string id)
         {
             var assets = doc.List<Asset>(ContentfulKeys.IncludedAssets);
@@ -18,11 +29,33 @@ namespace Contentful.Wyam
             return assets.FirstOrDefault(c => c.SystemProperties.Id == id);
         }
 
+        public static Entry<dynamic> GetIncludedEntry(this IDocument doc, JToken token)
+        {
+            if(token["sys"] == null || token["sys"]["id"] == null)
+            {
+                return null;
+            }
+
+            return GetIncludedEntryById(doc, token["sys"]["id"].ToString());
+        }
+
         public static Entry<dynamic> GetIncludedEntryById(this IDocument doc, string id)
         {
             var entries = doc.List<Entry<dynamic>>(ContentfulKeys.IncludedEntries);
 
             return entries.FirstOrDefault(c => c.SystemProperties.Id == id);
+        }
+
+        public static string ImageTagForAsset(this IDocument doc, JToken token, string alt = null,
+            int? width = null, int? height = null, int? jpgQuality = null, ImageResizeBehaviour resizeBehaviour = ImageResizeBehaviour.Default,
+            ImageFormat format = ImageFormat.Default, int? cornerRadius = 0, ImageFocusArea focus = ImageFocusArea.Default, string backgroundColor = null)
+        {
+            if (token["sys"] == null || token["sys"]["id"] == null)
+            {
+                return null;
+            }
+
+            return ImageTagForAsset(doc, token["sys"]["id"].ToString(), alt, width, height, jpgQuality, resizeBehaviour, format, cornerRadius, focus, backgroundColor);
         }
 
         public static string ImageTagForAsset(this IDocument doc, string assetId, string alt=null, 
