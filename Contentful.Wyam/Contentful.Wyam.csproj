@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Contentful.Wyam.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Contentful.Wyam.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Contentful.Core, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -129,8 +131,8 @@
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
-    <Reference Include="Wyam.Common, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wyam.Common.0.16.1\lib\net462\Wyam.Common.dll</HintPath>
+    <Reference Include="Wyam.Common, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wyam.Common.0.17.0\lib\net462\Wyam.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
