@@ -179,7 +179,7 @@ namespace Contentful.Wyam
 
             try
             {
-                entries = _client.GetEntriesCollectionAsync(queryBuilder).Result;
+                entries = _client.GetEntriesAsync(queryBuilder).Result;
             }
             catch (AggregateException ae)
             {
@@ -278,7 +278,7 @@ namespace Contentful.Wyam
 
             while (collection.Count() == _limit)
             {
-                collection = _client.GetEntriesCollectionAsync(CreateQueryBuilder()).Result;
+                collection = _client.GetEntriesAsync(CreateQueryBuilder()).Result;
 
                 entryList.AddRange(collection.Items);
                 includedAssets.AddRange(collection.IncludedAssets.Where(c => !includedAssets.Any(a => a.SystemProperties.Id == c.SystemProperties.Id)));
