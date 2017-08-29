@@ -23,12 +23,10 @@ namespace Contentful.Wyam
     /// For each Entry in Contentful one output document per requested locale will be created. For each output document every field of the Entry will be available
     /// as metadata. In addition a number of other metadata properties will be set for each document.
     /// </remarks>
-    /// <metadata name="ContentfulId" type="string">The id of the Entry. Note that this is not guaranteed to unique as there will be one document created per requested locale of the Entry.
-    /// A unique combination would be ContentfulId and ContentfulLocale.
-    /// </metadata>
-    /// <metadata name="ContentfulLocale" type="string">The locale of the Entry.</metadata>
-    /// <metadata name="ContentfulIncludedAssets" type="IEnumerable{Asset}">The included assets of the Entry. Refer to the Contentful .NET SDK documentation for more details.</metadata>
-    /// <metadata name="ContentfulIncludedEntries" type="IEnumerable{Entry<dynamic>}">The included referenced entries of the Entry. Refer to the Contentful .NET SDK documentation for more details.</metadata>
+    /// <metadata cref="ContentfulKeys.EntryId" usage="Output" />
+    /// <metadata cref="ContentfulKeys.EntryLocale" usage="Output" />
+    /// <metadata cref="ContentfulKeys.IncludedAssets" usage="Output" />
+    /// <metadata cref="ContentfulKeys.IncludedEntries" usage="Output" />
     /// <category>Content</category>
     public class Contentful : IModule
     {
@@ -151,6 +149,7 @@ namespace Contentful.Wyam
             return this;
         }
 
+        /// <inheritdoc />
         public IEnumerable<IDocument> Execute(IReadOnlyList<IDocument> inputs, IExecutionContext context)
         {
             Space space = null;
@@ -241,7 +240,7 @@ namespace Contentful.Wyam
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryLocale, localeCode));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedAssets, includedAssets));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedEntries, includedEntries));
-                    var doc = context.GetDocument(content, metaData);
+                    var doc = context.GetDocument(context.GetContentStream(content), metaData);
 
                     yield return doc;
                 }
