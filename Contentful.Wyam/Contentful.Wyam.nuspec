@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Contentful.Wyam</id>
-    <version>$version$-beta</version>
+    <version>$version$</version>
     <title>$title$</title>
     <authors>Contentful</authors>
     <owners>$author$</owners>
