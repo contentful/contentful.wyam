@@ -29,7 +29,7 @@ namespace Contentful.Wyam.Tests
         {
             //Arrange
             var mockClient = new Mock<IContentfulClient>();
-            mockClient.Setup(c => c.GetSpaceAsync(default(CancellationToken)))
+            mockClient.Setup(c => c.GetSpace(default(CancellationToken)))
                 .ReturnsAsync(
                 new Space()
                 {
@@ -62,7 +62,7 @@ namespace Contentful.Wyam.Tests
                 IncludedAssets = new List<Asset>(),
                 IncludedEntries = new List<Entry<dynamic>>()
             };
-            mockClient.Setup(c => c.GetEntriesAsync(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
+            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
             .ReturnsAsync(collection);
 
             var mockContext = new Mock<IExecutionContext>();
@@ -82,7 +82,7 @@ namespace Contentful.Wyam.Tests
         {
             //Arrange
             var mockClient = new Mock<IContentfulClient>();
-            mockClient.Setup(c => c.GetSpaceAsync(default(CancellationToken)))
+            mockClient.Setup(c => c.GetSpace(default(CancellationToken)))
                 .ReturnsAsync(
                 new Space()
                 {
@@ -118,7 +118,7 @@ namespace Contentful.Wyam.Tests
             };
             var callCount = 0;
 
-            mockClient.Setup(c => c.GetEntriesAsync(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
+            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
             .ReturnsAsync(() => {
 
                 if(callCount == 4)
@@ -144,7 +144,7 @@ namespace Contentful.Wyam.Tests
 
             //Assert
             Assert.Equal(24, res.Count());
-            mockClient.Verify(c => c.GetEntriesAsync(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)), Times.Exactly(5));
+            mockClient.Verify(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)), Times.Exactly(5));
         }
     }    
 }
