@@ -58,7 +58,7 @@ namespace Contentful.Wyam
         public Contentful(string deliveryKey, string spaceId, bool usePreview)
         {
             var httpClient = new HttpClient();
-            _client = new ContentfulClient(httpClient, deliveryKey, spaceId, usePreview);
+            _client = new ContentfulClient(httpClient, deliveryKey, "", spaceId, usePreview);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace Contentful.Wyam
 
             try
             {
-                space = _client.GetSpaceAsync().Result;
+                space = _client.GetSpace().Result;
             }
             catch(AggregateException ae)
             {
@@ -178,7 +178,7 @@ namespace Contentful.Wyam
 
             try
             {
-                entries = _client.GetEntriesAsync(queryBuilder).Result;
+                entries = _client.GetEntries(queryBuilder).Result;
             }
             catch (AggregateException ae)
             {
@@ -277,7 +277,7 @@ namespace Contentful.Wyam
 
             while (collection.Count() == _limit)
             {
-                collection = _client.GetEntriesAsync(CreateQueryBuilder()).Result;
+                collection = _client.GetEntries(CreateQueryBuilder()).Result;
 
                 entryList.AddRange(collection.Items);
                 includedAssets.AddRange(collection.IncludedAssets.Where(c => !includedAssets.Any(a => a.SystemProperties.Id == c.SystemProperties.Id)));
