@@ -35,8 +35,8 @@
     <DocumentationFile>bin\Release\Contentful.Wyam.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Contentful.Core, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\contentful.csharp.2.1.4\lib\netstandard1.4\Contentful.Core.dll</HintPath>
+    <Reference Include="Contentful.Core, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\contentful.csharp.3.6.1\lib\netstandard2.0\Contentful.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
@@ -137,8 +137,8 @@
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wyam.Common, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wyam.Common.1.4.1\lib\netstandard2.0\Wyam.Common.dll</HintPath>
+    <Reference Include="Wyam.Common, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wyam.Common.1.7.3\lib\netstandard2.0\Wyam.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

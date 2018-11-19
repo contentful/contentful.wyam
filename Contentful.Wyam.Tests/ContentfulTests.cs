@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using Moq;
 using Contentful.Core.Models.Management;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using System.Net;
 
 namespace Contentful.Wyam.Tests
 {
@@ -47,22 +49,22 @@ namespace Contentful.Wyam.Tests
                     }
                 });
 
-            var collection = new ContentfulCollection<Entry<dynamic>>()
+            var collection = new ContentfulCollection<JObject>()
             {
-                Items = new List<Entry<dynamic>>()
+                Items = new List<JObject>()
             {
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="123" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="3456" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="62365" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="tw635" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="uer46" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="jy456" } },
+                JObject.FromObject(new { sys = new { id = "123" } }),
+                JObject.FromObject(new { sys = new { id = "3456" } }),
+                JObject.FromObject(new { sys = new { id = "62365" } }),
+                JObject.FromObject(new { sys = new { id = "tw635" } }),
+                JObject.FromObject(new { sys = new { id = "uer46" } }),
+                JObject.FromObject(new { sys = new { id = "jy456" } }),
             },
 
                 IncludedAssets = new List<Asset>(),
                 IncludedEntries = new List<Entry<dynamic>>()
             };
-            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
+            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<JObject>>(), default(CancellationToken)))
             .ReturnsAsync(collection);
 
             var mockContext = new Mock<IExecutionContext>();
@@ -100,16 +102,16 @@ namespace Contentful.Wyam.Tests
                     }
                 });
 
-            var collection = new ContentfulCollection<Entry<dynamic>>()
+            var collection = new ContentfulCollection<JObject>()
             {
-                Items = new List<Entry<dynamic>>()
+                Items = new List<JObject>()
             {
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="123" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="3456" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="62365" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="tw635" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="uer46" } },
-                new Entry<dynamic>() { Fields = new JObject(), SystemProperties = new SystemProperties() { Id="jy456" } },
+                JObject.FromObject(new { sys = new { id = "123" } }),
+                JObject.FromObject(new { sys = new { id = "3456" } }),
+                JObject.FromObject(new { sys = new { id = "62365" } }),
+                JObject.FromObject(new { sys = new { id = "tw635" } }),
+                JObject.FromObject(new { sys = new { id = "uer46" } }),
+                JObject.FromObject(new { sys = new { id = "jy456" } }),
             },
 
                 IncludedAssets = new List<Asset>(),
@@ -118,13 +120,13 @@ namespace Contentful.Wyam.Tests
             };
             var callCount = 0;
 
-            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)))
+            mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<JObject>>(), default(CancellationToken)))
             .ReturnsAsync(() => {
 
                 if(callCount == 4)
                 {
-                    return new ContentfulCollection<Entry<dynamic>>() {
-                        Items = new List<Entry<dynamic>>(),
+                    return new ContentfulCollection<JObject>() {
+                        Items = new List<JObject>(),
                         IncludedAssets = new List<Asset>(),
                         IncludedEntries = new List<Entry<dynamic>>(),
                         Total = 24
@@ -136,7 +138,6 @@ namespace Contentful.Wyam.Tests
 
             var mockContext = new Mock<IExecutionContext>();
 
-
             var contentful = new Contentful(mockClient.Object).WithContentField("body").WithRecursiveCalling().WithLimit(6);
 
             //Act
@@ -144,7 +145,7 @@ namespace Contentful.Wyam.Tests
 
             //Assert
             Assert.Equal(24, res.Count());
-            mockClient.Verify(c => c.GetEntries(It.IsAny<QueryBuilder<Entry<dynamic>>>(), default(CancellationToken)), Times.Exactly(5));
+            mockClient.Verify(c => c.GetEntries(It.IsAny<QueryBuilder<JObject>>(), default(CancellationToken)), Times.Exactly(5));
         }
     }    
 }
