@@ -1,6 +1,7 @@
 ﻿using Contentful.Core;
 using Contentful.Core.Errors;
 using Contentful.Core.Models;
+using Contentful.Core.Models.Management;
 using Contentful.Core.Search;
 using Newtonsoft.Json.Linq;
 using System;
@@ -174,7 +175,7 @@ namespace Contentful.Wyam
             }
 
             var queryBuilder = CreateQueryBuilder();
-            ContentfulCollection<Entry<dynamic>> entries = null;
+            ContentfulCollection<JObject> entries = null;
 
             try
             {
@@ -226,17 +227,21 @@ namespace Contentful.Wyam
                 {
                     var localeCode = locale.Code;
 
-                    var items = (entry.Fields as IEnumerable<KeyValuePair<string, JToken>>).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                    
-                    var content = items.ContainsKey(_contentField) ? items[_contentField][localeCode].ToString() : "No content";
+                    var items = (entry as IEnumerable<KeyValuePair<string, JToken>>).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                    var content = "No content";
+
+                    content = items.ContainsKey(_contentField) ? GetNextValidJTokenValue(items[_contentField], locale).Value<string>() : "No content";
 
                     if (string.IsNullOrEmpty(_contentField))
                     {
                         content = "";
                     }
 
-                    var metaData = items.Select(c => new KeyValuePair<string, object>(c.Key, c.Value[localeCode])).ToList();
-                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryId, $"{entry.SystemProperties.Id}"));
+                    var metaData = items
+                        .Where(c => !c.Key.StartsWith("$") && c.Key != "sys" )
+                        .Select(c => new KeyValuePair<string, object>(c.Key, GetNextValidJTokenValue(c.Value, locale))).ToList();
+                    metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryId, $"{entry["sys"]["id"]}"));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryLocale, localeCode));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedAssets, includedAssets));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.IncludedEntries, includedEntries));
@@ -245,11 +250,23 @@ namespace Contentful.Wyam
                     yield return doc;
                 }
             }
+
+            JToken GetNextValidJTokenValue(JToken token, Locale locale)
+            {
+                var localizedField = token.Children<JProperty>().FirstOrDefault(c => c.Name == locale.Code);
+
+                if(localizedField == null && locale.FallbackCode != null)
+                {
+                    return GetNextValidJTokenValue(token, locales.FirstOrDefault(c => c.Code == locale.FallbackCode));
+                }
+
+                return localizedField?.Value;
+            }
         }
 
-        private QueryBuilder<Entry<dynamic>> CreateQueryBuilder() {
-            var queryBuilder = QueryBuilder<Entry<dynamic>>.New.LocaleIs("*").Include(_includes)
-                .OrderBy(SortOrderBuilder<Entry<dynamic>>.New(f => f.SystemProperties.CreatedAt).Build())
+        private QueryBuilder<JObject> CreateQueryBuilder() {
+            var queryBuilder = QueryBuilder<JObject>.New.LocaleIs("*").Include(_includes)
+                .OrderBy(SortOrderBuilder<JObject>.New("sys.createdAt").Build())
                 .Limit(_limit).Skip(_skip);
 
             if (!string.IsNullOrEmpty(_contentTypeId))
@@ -260,12 +277,12 @@ namespace Contentful.Wyam
             return queryBuilder;
         }
 
-        private ContentfulCollection<Entry<dynamic>> FetchEntriesRecursively(ContentfulCollection<Entry<dynamic>> entries)
+        private ContentfulCollection<JObject> FetchEntriesRecursively(ContentfulCollection<JObject> entries)
         {
-            var entryList = new List<Entry<dynamic>>();
+            var entryList = new List<JObject>();
             var includedAssets = new List<Asset>();
             var includedEntries = new List<Entry<dynamic>>();
-            var collection = new ContentfulCollection<Entry<dynamic>>()
+            var collection = new ContentfulCollection<JObject>()
             {
                 Items = entries.Items
             };
