@@ -45,7 +45,7 @@ namespace Contentful.Wyam
         /// </summary>
         /// <param name="deliveryKey">The Contentful Content Delivery API key.</param>
         /// <param name="spaceId">The id of the space in Contentful from which to fetch content.</param>
-        public Contentful(string deliveryKey, string spaceId): this(deliveryKey, spaceId, false)
+        public Contentful(string deliveryKey, string spaceId) : this(deliveryKey, spaceId, false)
         {
 
         }
@@ -159,11 +159,11 @@ namespace Contentful.Wyam
             {
                 space = _client.GetSpace().Result;
             }
-            catch(AggregateException ae)
+            catch (AggregateException ae)
             {
                 ae.Handle((ex) => {
 
-                    if(ex is ContentfulException)
+                    if (ex is ContentfulException)
                     {
                         Trace.TraceError($"Error when fetching space from Contentful: {ex.Message}");
                         Trace.TraceError($"Details: {(ex as ContentfulException).ErrorDetails.Errors}");
@@ -206,7 +206,7 @@ namespace Contentful.Wyam
 
             var locales = space.Locales.Where(l => l.Default);
 
-            if(_locale == "*")
+            if (_locale == "*")
             {
                 locales = space.Locales;
             }
@@ -214,7 +214,7 @@ namespace Contentful.Wyam
             {
                 locales = space.Locales.Where(l => l.Code == _locale);
             }
-            
+
             if (!locales.Any())
             {
                 //Warn or throw here?
@@ -239,7 +239,7 @@ namespace Contentful.Wyam
                     }
 
                     var metaData = items
-                        .Where(c => !c.Key.StartsWith("$") && c.Key != "sys" )
+                        .Where(c => !c.Key.StartsWith("$") && c.Key != "sys")
                         .Select(c => new KeyValuePair<string, object>(c.Key, GetNextValidJTokenValue(c.Value, locale))).ToList();
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryId, $"{entry["sys"]["id"]}"));
                     metaData.Add(new KeyValuePair<string, object>(ContentfulKeys.EntryLocale, localeCode));
@@ -255,7 +255,7 @@ namespace Contentful.Wyam
             {
                 var localizedField = token.Children<JProperty>().FirstOrDefault(c => c.Name == locale.Code);
 
-                if(localizedField == null && locale.FallbackCode != null)
+                if (localizedField == null && locale.FallbackCode != null)
                 {
                     return GetNextValidJTokenValue(token, locales.FirstOrDefault(c => c.Code == locale.FallbackCode));
                 }
@@ -264,7 +264,8 @@ namespace Contentful.Wyam
             }
         }
 
-        private QueryBuilder<JObject> CreateQueryBuilder() {
+        private QueryBuilder<JObject> CreateQueryBuilder()
+        {
             var queryBuilder = QueryBuilder<JObject>.New.LocaleIs("*").Include(_includes)
                 .OrderBy(SortOrderBuilder<JObject>.New("sys.createdAt").Build())
                 .Limit(_limit).Skip(_skip);

@@ -1,26 +1,15 @@
-using System;
-using Wyam.Common.Documents;
-using System.Collections.Generic;
-using System.Linq;
-using Wyam.Common.Execution;
-using System.Collections;
-using System.IO;
-using Wyam.Common.Caching;
-using Wyam.Common.Configuration;
-using Wyam.Common.IO;
-using Wyam.Common.Meta;
-using Wyam.Common.Modules;
-using Xunit;
 using Contentful.Core;
 using Contentful.Core.Models;
-using Contentful.Core.Search;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
 using Contentful.Core.Models.Management;
+using Contentful.Core.Search;
+using Moq;
 using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using System.Net;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Wyam.Common.Documents;
+using Wyam.Common.Execution;
+using Xunit;
 
 namespace Contentful.Wyam.Tests
 {
@@ -123,9 +112,10 @@ namespace Contentful.Wyam.Tests
             mockClient.Setup(c => c.GetEntries(It.IsAny<QueryBuilder<JObject>>(), default(CancellationToken)))
             .ReturnsAsync(() => {
 
-                if(callCount == 4)
+                if (callCount == 4)
                 {
-                    return new ContentfulCollection<JObject>() {
+                    return new ContentfulCollection<JObject>()
+                    {
                         Items = new List<JObject>(),
                         IncludedAssets = new List<Asset>(),
                         IncludedEntries = new List<Entry<dynamic>>(),
@@ -147,5 +137,5 @@ namespace Contentful.Wyam.Tests
             Assert.Equal(24, res.Count());
             mockClient.Verify(c => c.GetEntries(It.IsAny<QueryBuilder<JObject>>(), default(CancellationToken)), Times.Exactly(5));
         }
-    }    
+    }
 }
