@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contentful.Wyam", "Contentful.Wyam\Contentful.Wyam.csproj", "{BE2A614C-22CB-4329-83BC-2A30A2169295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contentful.Wyam", "Contentful.Wyam\Contentful.Wyam.csproj", "{26ADD4E4-5FAC-437D-BEDF-58B283876BE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contentful.Wyam.Tests", "Contentful.Wyam.Tests\Contentful.Wyam.Tests.csproj", "{B2816070-17DB-4655-9C2F-D7265CEB44D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contentful.Wyam.Tests", "Contentful.Wyam.Tests\Contentful.Wyam.Tests.csproj", "{CE76C19C-A7E1-4F5B-9231-A7DD819978EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE2A614C-22CB-4329-83BC-2A30A2169295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE2A614C-22CB-4329-83BC-2A30A2169295}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE2A614C-22CB-4329-83BC-2A30A2169295}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE2A614C-22CB-4329-83BC-2A30A2169295}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2816070-17DB-4655-9C2F-D7265CEB44D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2816070-17DB-4655-9C2F-D7265CEB44D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2816070-17DB-4655-9C2F-D7265CEB44D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2816070-17DB-4655-9C2F-D7265CEB44D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26ADD4E4-5FAC-437D-BEDF-58B283876BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26ADD4E4-5FAC-437D-BEDF-58B283876BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26ADD4E4-5FAC-437D-BEDF-58B283876BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26ADD4E4-5FAC-437D-BEDF-58B283876BE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE76C19C-A7E1-4F5B-9231-A7DD819978EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE76C19C-A7E1-4F5B-9231-A7DD819978EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE76C19C-A7E1-4F5B-9231-A7DD819978EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE76C19C-A7E1-4F5B-9231-A7DD819978EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86808D5B-8D24-4C6C-8823-DB645C667474}
 	EndGlobalSection
 EndGlobal

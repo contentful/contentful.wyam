@@ -1,13 +1,12 @@
-﻿using Contentful.Core.Images;
-using Contentful.Core.Models;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Wyam.Common.Documents;
 using Wyam.Common.Meta;
+using Contentful.Core.Images;
+using Contentful.Core.Models;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Contentful.Wyam
 {
@@ -53,7 +52,7 @@ namespace Contentful.Wyam
         /// <returns>The found entry or null.</returns>
         public static Entry<dynamic> GetIncludedEntry(this IDocument doc, JToken token)
         {
-            if(token["sys"] == null || token["sys"]["id"] == null)
+            if (token["sys"] == null || token["sys"]["id"] == null)
             {
                 return null;
             }
@@ -116,13 +115,13 @@ namespace Contentful.Wyam
         /// <param name="focus">The focus area of the image when resizing.</param>
         /// <param name="backgroundColor">The background color of any padding that is added to the image.</param>
         /// <returns>The image tag as a string.</returns>
-        public static string ImageTagForAsset(this IDocument doc, string assetId, string alt=null, 
-            int? width = null, int? height = null, int? jpgQuality = null, ImageResizeBehaviour resizeBehaviour = ImageResizeBehaviour.Default, 
+        public static string ImageTagForAsset(this IDocument doc, string assetId, string alt = null,
+            int? width = null, int? height = null, int? jpgQuality = null, ImageResizeBehaviour resizeBehaviour = ImageResizeBehaviour.Default,
             ImageFormat format = ImageFormat.Default, int? cornerRadius = 0, ImageFocusArea focus = ImageFocusArea.Default, string backgroundColor = null)
         {
             var asset = doc.List<Asset>(ContentfulKeys.IncludedAssets)?.FirstOrDefault(c => c.SystemProperties.Id == assetId);
-            
-            if(asset == null)
+
+            if (asset == null)
             {
                 return string.Empty;
             }
@@ -153,13 +152,12 @@ namespace Contentful.Wyam
 
             imageUrlBuilder.SetResizingBehaviour(resizeBehaviour).SetFormat(format).SetFocusArea(focus).SetBackgroundColor(backgroundColor);
 
-            if(alt == null && !string.IsNullOrEmpty(asset.TitleLocalized[locale]))
+            if (alt == null && !string.IsNullOrEmpty(asset.TitleLocalized[locale]))
             {
                 alt = asset.TitleLocalized[locale];
             }
 
             return $@"<img src=""{asset.FilesLocalized[locale].Url + imageUrlBuilder.Build()}"" alt=""{alt}"" height=""{height}"" width=""{width}"" />";
         }
-
     }
 }
